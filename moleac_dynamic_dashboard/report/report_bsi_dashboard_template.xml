@@ -1,0 +1,129 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+<template id="report_bsi_dashboard">
+    <t t-call="web.html_container">
+        <t t-foreach="docs" t-as="doc">
+            <t t-call="web.external_layout">
+                <div class="page bsi-dashboard-report">
+
+                    <!-- ── Report header ──────────────────────── -->
+                    <div class="bsi-report-header text-center mb-3">
+                        <h2><t t-esc="doc.name"/></h2>
+                        <p class="text-muted mb-0">
+                            <t t-esc="doc.company_id.name"/>
+                        </p>
+                        <t t-if="doc.is_divide and doc.value">
+                            <p class="text-muted small">
+                                Amounts divided by <t t-esc="doc.value"/>
+                            </p>
+                        </t>
+                    </div>
+
+                    <!-- ── One table per period section ──────── -->
+                    <t t-foreach="sections" t-as="section">
+                        <t t-if="section['rows']">
+
+                            <!-- Section title in red -->
+                            <h4 style="text-align:center;color:#c53030;
+                                       font-weight:700;margin:20px 0 8px;">
+                                <t t-esc="section['title']"/>
+                            </h4>
+
+                            <table class="table table-sm bsi-report-table"
+                                   style="font-size:11px;margin-bottom:24px;">
+                                <thead>
+                                    <t t-set="columns"      t-value="section['columns']"/>
+                                    <t t-set="pgs"          t-value="section['period_groups']"/>
+                                    <t t-set="hdr_style"    t-value="section.get('header_style','actual_prev')"/>
+
+                                    <t t-if="pgs and columns">
+                                        <!-- Row 1: group labels -->
+                                        <tr class="bsi-col-header">
+                                            <th rowspan="2"
+                                                style="width:35%;vertical-align:bottom;">
+                                                Department
+                                            </th>
+                                            <t t-foreach="pgs" t-as="pg">
+                                                <th t-att-colspan="pg['span']"
+                                                    t-att-style="'text-align:center;border-left:2px solid #adb5bd;font-weight:700;background:' + ('#dbeafe' if hdr_style == \'actual_prev\' and (\'Actual\' in pg[\'label\'] or \'YTD\' in pg[\'label\']) else ('#d1fae5' if hdr_style == \'single\' else '#f8f9fa')) + ';'">
+                                                    <t t-esc="pg['label']"/>
+                                                </th>
+                                            </t>
+                                        </tr>
+                                        <!-- Row 2: period labels -->
+                                        <tr>
+                                            <t t-foreach="columns" t-as="col">
+                                                <th style="text-align:right;font-size:10px;
+                                                           color:#6c757d;font-weight:600;
+                                                           border-left:1px solid #dee2e6;">
+                                                    <t t-esc="col[0]"/>
+                                                </th>
+                                            </t>
+                                        </tr>
+                                    </t>
+
+                                    <t t-if="not (pgs and columns)">
+                                        <tr class="bsi-col-header">
+                                            <th style="width:50%">Department</th>
+                                            <th style="text-align:right;">Balance</th>
+                                        </tr>
+                                    </t>
+                                </thead>
+
+                                <tbody>
+                                    <t t-foreach="section['rows']" t-as="row">
+
+                                        <t t-if="row['row_type'] == 'section'">
+                                            <tr class="bsi-row-section">
+                                                <td t-att-colspan="1 + len(section['columns']) if section['columns'] else 2"
+                                                    t-att-style="'padding-left:' + str(row['level'] * 20 + 8) + 'px'">
+                                                    <strong><t t-esc="row['name']"/></strong>
+                                                </td>
+                                            </tr>
+                                        </t>
+
+                                        <t t-if="row['row_type'] == 'line'">
+                                            <tr class="bsi-row-line">
+                                                <td t-att-style="'padding-left:' + str(row['level'] * 20 + 16) + 'px'">
+                                                    <t t-esc="row['name']"/>
+                                                </td>
+                                                <t t-if="not section['columns']">
+                                                    <td style="text-align:right;">—</td>
+                                                </t>
+                                                <t t-foreach="row.get('balances', [])" t-as="bal">
+                                                    <td t-att-class="'text-end bsi-negative' if bal &lt; 0 else 'text-end'">
+                                                        <t t-esc="'{:,.{}f}'.format(bal, decimal)"/>
+                                                    </td>
+                                                </t>
+                                            </tr>
+                                        </t>
+
+                                        <t t-if="row['row_type'] == 'total'">
+                                            <tr class="bsi-row-total">
+                                                <td t-att-style="'padding-left:' + str(row['level'] * 20 + 8) + 'px'">
+                                                    <strong><t t-esc="row['name']"/></strong>
+                                                </td>
+                                                <t t-if="not section['columns']">
+                                                    <td style="text-align:right;"><strong>0.00</strong></td>
+                                                </t>
+                                                <t t-foreach="row.get('balances', [])" t-as="bal">
+                                                    <td t-att-class="'text-end bsi-negative' if bal &lt; 0 else 'text-end'">
+                                                        <strong><t t-esc="'{:,.{}f}'.format(bal, decimal)"/></strong>
+                                                    </td>
+                                                </t>
+                                            </tr>
+                                        </t>
+
+                                    </t>
+                                </tbody>
+                            </table>
+
+                        </t>
+                    </t>
+
+                </div>
+            </t>
+        </t>
+    </t>
+</template>
+</odoo>

@@ -1,0 +1,169 @@
+/* ── Period bar ───────────────────────────────────────────────── */
+.bsi-period-bar {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0;
+    border: 1px solid #dee2e6;
+    border-radius: 6px;
+    overflow: hidden;
+    margin-bottom: 8px;
+}
+
+.bsi-period-group {
+    flex: 1 1 260px;
+    border-right: 1px solid #dee2e6;
+    padding: 10px 14px 10px;
+    background: #fff;
+}
+
+.bsi-period-group:last-child {
+    border-right: none;
+}
+
+.bsi-period-label {
+    font-size: 10px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    color: #495057;
+    margin-bottom: 8px;
+    border-bottom: 2px solid #dee2e6;
+    padding-bottom: 4px;
+}
+
+.bsi-period-fields {
+    display: flex;
+    align-items: flex-end;
+    flex-wrap: wrap;
+    gap: 10px;
+}
+
+.bsi-field-stack {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+}
+
+.bsi-field-sublabel {
+    font-size: 10px;
+    color: #6c757d;
+    font-weight: 500;
+}
+
+.bsi-sel-field {
+    min-width: 80px;
+    max-width: 110px;
+}
+
+.bsi-num-field {
+    min-width: 54px;
+    max-width: 70px;
+}
+
+.bsi-period-hint {
+    font-size: 10px;
+    color: #adb5bd;
+    font-style: italic;
+    margin-top: 6px;
+}
+
+/* ── Options bar ─────────────────────────────────────────────── */
+.bsi-options-bar {
+    display: flex;
+    align-items: center;
+    gap: 20px;
+    padding: 8px 14px;
+    background: #f8f9fa;
+    border: 1px solid #dee2e6;
+    border-radius: 6px;
+    margin-bottom: 16px;
+}
+
+.bsi-opt-item {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+}
+
+.bsi-opt-label {
+    font-size: 12px;
+    color: #495057;
+    font-weight: 500;
+}
+
+/* ── Department tree container ───────────────────────────────── */
+.bsi-dept-tree-outer {
+    border: 1px solid #dee2e6;
+    border-radius: 6px;
+    overflow: hidden;
+    background: #fff;
+    padding: 8px 0;
+    margin-bottom: 16px;
+    max-height: 320px;
+    overflow-y: auto;
+}
+
+/* ── Preview container ───────────────────────────────────────── */
+.bsi-preview-outer {
+    border: 1px solid #dee2e6;
+    border-radius: 6px;
+    overflow: hidden;
+    background: #fff;
+    padding: 20px 24px;
+    margin-top: 4px;
+    min-height: 200px;
+}
+
+/* ── PDF report styles ───────────────────────────────────────── */
+.bsi-dashboard-report {
+    font-size: 12px;
+}
+
+.bsi-report-header h2 {
+    font-size: 18px;
+    font-weight: 700;
+    margin-bottom: 4px;
+}
+
+.bsi-report-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 12px;
+}
+
+.bsi-report-table th,
+.bsi-report-table td {
+    padding: 4px 8px;
+    border-bottom: 1px solid #dee2e6;
+    vertical-align: middle;
+}
+
+.bsi-col-header th {
+    background-color: #f8f9fa;
+    font-weight: 700;
+    border-top: 2px solid #adb5bd;
+    border-bottom: 2px solid #adb5bd;
+}
+
+.bsi-row-section td {
+    background-color: #e9ecef;
+    font-weight: 700;
+    border-top: 1px solid #ced4da;
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+    font-size: 11px;
+}
+
+.bsi-row-line td {
+    background-color: #ffffff;
+}
+
+.bsi-row-total td {
+    border-top: 1px solid #adb5bd;
+    border-bottom: 2px solid #adb5bd;
+    background-color: #f8f9fa;
+}
+
+.bsi-negative {
+    color: #dc3545;
+}

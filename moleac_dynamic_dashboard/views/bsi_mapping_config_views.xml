@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- Mapping line popup form (used when clicking a line in the one2many) -->
+    <record id="bsi_mapping_line_form_view" model="ir.ui.view">
+        <field name="name">bsi.mapping.line.form</field>
+        <field name="model">bsi.mapping.line</field>
+        <field name="arch" type="xml">
+            <form string="Mapping Line">
+                <sheet>
+                    <group>
+                        <group>
+                            <field name="name"/>
+                            <field name="row_type"/>
+                            <field name="indent_level"/>
+                            <field name="negate"/>
+                            <field name="sequence"/>
+                        </group>
+                    </group>
+                    <group string="Account Groups"
+                           invisible="row_type in ('section', 'separator')">
+                        <field name="account_group_ids"
+                               widget="many2many_tags"
+                               options="{'no_create': True}"
+                               nolabel="1"
+                               colspan="2"/>
+                    </group>
+                    <group string="Individual Accounts"
+                           invisible="row_type in ('section', 'separator')">
+                        <field name="account_ids"
+                               widget="many2many_tags"
+                               options="{'no_create': True}"
+                               nolabel="1"
+                               colspan="2"/>
+                    </group>
+                </sheet>
+            </form>
+        </field>
+    </record>
+</odoo>

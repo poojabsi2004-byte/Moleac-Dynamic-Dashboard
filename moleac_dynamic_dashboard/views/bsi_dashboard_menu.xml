@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <menuitem id="menu_moleac_dynamic_dashboard"
+              name="Dynamic Mapping"
+              parent="bsi_moleac_dashboard_mapping.data_mapping_config"
+              action="moleac_dynamic_dashboard.action_bsi_dashboard_config"
+              sequence="10"/>
+
+</odoo>

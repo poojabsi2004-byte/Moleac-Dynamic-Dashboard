@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <record id="action_report_bsi_dashboard" model="ir.actions.report">
+        <field name="name">BSI Dynamic Dashboard</field>
+        <field name="model">bsi.dashboard.config</field>
+        <field name="report_type">qweb-pdf</field>
+        <field name="report_name">moleac_dynamic_dashboard.report_bsi_dashboard</field>
+        <field name="report_file">moleac_dynamic_dashboard.report_bsi_dashboard</field>
+        <field name="binding_model_id" ref="model_bsi_dashboard_config"/>
+        <field name="binding_type">report</field>
+        <field name="paperformat_id" ref="base.paperformat_euro"/>
+    </record>
+
+</odoo>

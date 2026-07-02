@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <record id="view_bsi_dashboard_export_wizard_form" model="ir.ui.view">
+        <field name="name">bsi.dashboard.export.wizard.form</field>
+        <field name="model">bsi.dashboard.export.wizard</field>
+        <field name="arch" type="xml">
+            <form string="Export Report">
+                <sheet>
+                    <div class="o_form_sheet_bg">
+                        <group string="Select Sections to Export">
+
+                            <!-- Yearly -->
+                            <group col="2" invisible="not has_yearly">
+                                <field name="has_yearly" invisible="1"/>
+                                <field name="sel_yearly" string="Yearly Data"/>
+                            </group>
+
+                            <!-- Quarterly group -->
+                            <group col="2" invisible="not has_quarterly and not has_current_quarterly">
+                                <field name="has_quarterly" invisible="1"/>
+                                <field name="has_current_quarterly" invisible="1"/>
+                                <field name="sel_quarterly"
+                                       string="Quarterly Data"
+                                       invisible="not has_quarterly"/>
+                                <field name="sel_current_quarterly"
+                                       string="Current Year Quarterly"
+                                       invisible="not has_current_quarterly"/>
+                            </group>
+
+                            <!-- Monthly group -->
+                            <group col="2" invisible="not has_monthly and not has_as_of_month and not has_current_months">
+                                <field name="has_monthly" invisible="1"/>
+                                <field name="has_as_of_month" invisible="1"/>
+                                <field name="has_current_months" invisible="1"/>
+                                <field name="sel_monthly"
+                                       string="Monthly Report"
+                                       invisible="not has_monthly"/>
+                                <field name="sel_as_of_month"
+                                       string="As Of Month"
+                                       invisible="not has_as_of_month"/>
+                                <field name="sel_current_months"
+                                       string="Current Year's Months"
+                                       invisible="not has_current_months"/>
+                            </group>
+
+                        </group>
+                    </div>
+                </sheet>
+                <footer>
+                    <button name="action_print_pdf"
+                            string="Print PDF"
+                            type="object"
+                            class="btn-primary"
+                            icon="fa-print"
+                            close="1"/>
+                    <button name="action_export_xlsx"
+                            string="Download XLSX"
+                            type="object"
+                            class="btn-secondary"
+                            icon="fa-file-excel-o"
+                            close="1"/>
+                    <button string="Cancel" class="btn-secondary" special="cancel"/>
+                </footer>
+            </form>
+        </field>
+    </record>
+
+</odoo>

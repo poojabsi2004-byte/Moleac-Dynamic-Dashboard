@@ -23,94 +23,122 @@
         <field name="arch" type="xml">
             <form string="Dynamic Dashboard Config">
                 <header>
-                    <button name="action_view_report"
-                            string="Print PDF"
-                            type="object"
-                            class="btn-primary"
-                            icon="fa-file-pdf-o"/>
-                    <button name="action_download_xlsx"
-                            string="Download XLSX"
-                            type="object"
-                            class="btn-secondary"
-                            icon="fa-file-excel-o"/>
+                    <div class="bsi-header-bar">
+
+                        <!-- Row 1: action buttons + filters -->
+                        <div class="bsi-header-row1">
+                            <button name="action_view_report"
+                                    string="Print"
+                                    type="object"
+                                    class="btn btn-primary btn-sm bsi-hdr-btn"
+                                    icon="fa-file-pdf-o"/>
+                            <button name="%(moleac_dynamic_dashboard.action_bsi_dashboard_filter_template)d"
+                                    string="Filter Template"
+                                    type="action"
+                                    class="btn btn-secondary btn-sm bsi-hdr-btn"
+                                    icon="fa-bookmark-o"/>
+
+                            <div class="bsi-hdr-sep"/>
+
+                            <div class="bsi-header-filter-item">
+                                <span class="bsi-header-filter-label">Show Section</span>
+                                <field name="active_section" nolabel="1" class="bsi-header-select"/>
+                            </div>
+                            <div class="bsi-header-filter-item">
+                                <span class="bsi-header-filter-label">Apply Template</span>
+                                <field name="filter_template_id" nolabel="1"
+                                       class="bsi-header-select"
+                                       options="{'no_create': false}"
+                                       placeholder="Select template…"/>
+                                <button name="action_apply_template"
+                                        string="Apply"
+                                        type="object"
+                                        class="btn btn-secondary btn-sm"
+                                        icon="fa-check"
+                                        invisible="not filter_template_id"/>
+                            </div>
+                        </div>
+
+                        <!-- Row 2: Period Configuration -->
+                        <div class="bsi-header-period">
+                            <div class="bsi-header-period-title">Period Configuration</div>
+                            <div class="bsi-header-period-body">
+
+                                <!-- Yearly -->
+                                <div class="bsi-hp-group">
+                                    <div class="bsi-hp-group-label">Yearly Data</div>
+                                    <div class="bsi-hp-fields">
+                                        <div class="bsi-hp-field">
+                                            <span class="bsi-hp-sublabel">Year</span>
+                                            <field name="year_sel" nolabel="1" class="bsi-hp-sel"/>
+                                        </div>
+                                        <div class="bsi-hp-field">
+                                            <span class="bsi-hp-sublabel">Prev Years</span>
+                                            <field name="previous_year_number" nolabel="1" class="bsi-hp-num"/>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <!-- Quarterly -->
+                                <div class="bsi-hp-group">
+                                    <div class="bsi-hp-group-label">Quarterly Data</div>
+                                    <div class="bsi-hp-fields">
+                                        <div class="bsi-hp-field">
+                                            <span class="bsi-hp-sublabel">Quarter</span>
+                                            <field name="quarter" nolabel="1" class="bsi-hp-sel"/>
+                                        </div>
+                                        <div class="bsi-hp-field">
+                                            <span class="bsi-hp-sublabel">Year</span>
+                                            <field name="quarter_year_sel" nolabel="1" class="bsi-hp-sel"/>
+                                        </div>
+                                        <div class="bsi-hp-field">
+                                            <span class="bsi-hp-sublabel">Prev Qtrs</span>
+                                            <field name="previous_quarter_number" nolabel="1" class="bsi-hp-num"/>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <!-- Monthly -->
+                                <div class="bsi-hp-group">
+                                    <div class="bsi-hp-group-label">Monthly Data</div>
+                                    <div class="bsi-hp-fields">
+                                        <div class="bsi-hp-field">
+                                            <span class="bsi-hp-sublabel">Month</span>
+                                            <field name="month" nolabel="1" class="bsi-hp-sel"/>
+                                        </div>
+                                        <div class="bsi-hp-field">
+                                            <span class="bsi-hp-sublabel">Year</span>
+                                            <field name="month_year_sel" nolabel="1" class="bsi-hp-sel"/>
+                                        </div>
+                                        <div class="bsi-hp-field">
+                                            <span class="bsi-hp-sublabel">Prev Yrs</span>
+                                            <field name="previous_month_number" nolabel="1" class="bsi-hp-num"/>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <!-- Display -->
+                                <div class="bsi-hp-group bsi-hp-group-display">
+                                    <div class="bsi-hp-group-label">Display</div>
+                                    <div class="bsi-hp-fields">
+                                        <div class="bsi-hp-field">
+                                            <span class="bsi-hp-sublabel">Decimal</span>
+                                            <field name="decimal" nolabel="1" class="bsi-hp-num"/>
+                                        </div>
+                                        <div class="bsi-hp-field">
+                                            <span class="bsi-hp-sublabel">Divide By</span>
+                                            <field name="value" nolabel="1" class="bsi-hp-num"/>
+                                        </div>
+                                    </div>
+                                </div>
+
+                            </div>
+                        </div>
+
+                    </div><!-- /bsi-header-bar -->
                 </header>
+
                 <sheet>
-
-                    <!-- ── Period Configuration ──────────────────── -->
-                    <separator string="Period Configuration"/>
-                    <div class="bsi-period-bar">
-
-                        <!-- Yearly Data -->
-                        <div class="bsi-period-group">
-                            <div class="bsi-period-label">Yearly Data</div>
-                            <div class="bsi-period-fields">
-                                <div class="bsi-field-stack">
-                                    <span class="bsi-field-sublabel">Year</span>
-                                    <field name="year_sel" nolabel="1" class="bsi-sel-field"/>
-                                </div>
-                                <div class="bsi-field-stack">
-                                    <span class="bsi-field-sublabel">Previous Years</span>
-                                    <field name="previous_year_number" nolabel="1" class="bsi-num-field"/>
-                                </div>
-                            </div>
-                        </div>
-
-                        <!-- Quarterly Data + Current Year Quarterly -->
-                        <div class="bsi-period-group">
-                            <div class="bsi-period-label">Quarterly Data</div>
-                            <div class="bsi-period-fields">
-                                <div class="bsi-field-stack">
-                                    <span class="bsi-field-sublabel">Quarter</span>
-                                    <field name="quarter" nolabel="1" class="bsi-sel-field"/>
-                                </div>
-                                <div class="bsi-field-stack">
-                                    <span class="bsi-field-sublabel">Year</span>
-                                    <field name="quarter_year_sel" nolabel="1" class="bsi-sel-field"/>
-                                </div>
-                                <div class="bsi-field-stack">
-                                    <span class="bsi-field-sublabel">Previous Qtrs</span>
-                                    <field name="previous_quarter_number" nolabel="1" class="bsi-num-field"/>
-                                </div>
-                            </div>
-                            <div class="bsi-period-hint">Year alone → all 4 quarters</div>
-                        </div>
-
-                        <!-- Monthly Report + As Of Month + Current Year's Months -->
-                        <div class="bsi-period-group">
-                            <div class="bsi-period-label">Monthly Data</div>
-                            <div class="bsi-period-fields">
-                                <div class="bsi-field-stack">
-                                    <span class="bsi-field-sublabel">Month</span>
-                                    <field name="month" nolabel="1" class="bsi-sel-field"/>
-                                </div>
-                                <div class="bsi-field-stack">
-                                    <span class="bsi-field-sublabel">Year</span>
-                                    <field name="month_year_sel" nolabel="1" class="bsi-sel-field"/>
-                                </div>
-                                <div class="bsi-field-stack">
-                                    <span class="bsi-field-sublabel">Previous Yrs</span>
-                                    <field name="previous_month_number" nolabel="1" class="bsi-num-field"/>
-                                </div>
-                            </div>
-                            <div class="bsi-period-hint">Year alone → all 12 months</div>
-                        </div>
-
-                    </div>
-
-                    <!-- ── Display options ───────────────────────── -->
-                    <div class="bsi-options-bar">
-                        <div class="bsi-opt-item">
-                            <span class="bsi-opt-label">Decimal</span>
-                            <field name="decimal" nolabel="1"/>
-                        </div>
-                        <div class="bsi-opt-item">
-                            <field name="is_divide" nolabel="1"/>
-                            <span class="bsi-opt-label">Divide by</span>
-                            <field name="value" nolabel="1" invisible="not is_divide"/>
-                        </div>
-                    </div>
-
-                    <!-- ── Department + Data preview ─────────────── -->
                     <separator string="Department Report"/>
                     <div class="bsi-preview-outer">
                         <field name="report_preview_html"
@@ -118,7 +146,6 @@
                                readonly="1"
                                nolabel="1"/>
                     </div>
-
                 </sheet>
             </form>
         </field>
@@ -129,17 +156,6 @@
         <field name="name">Data Mapping Config</field>
         <field name="res_model">bsi.dashboard.config</field>
         <field name="view_mode">form</field>
-        <field name="help" type="html">
-            <p class="o_view_nocontent_smiling_face">
-                Create your first Dynamic Dashboard Configuration
-            </p>
-            <p>
-                Set the periods (Year / Quarter / Month) above. The department
-                hierarchy from <b>Accounting → Data Mapping Config → Data Mapping</b>
-                is loaded automatically with clickable ▶ / ▼ arrows to expand or
-                collapse each department group. Download as <b>PDF</b> or <b>XLSX</b>.
-            </p>
-        </field>
     </record>
 
 </odoo>

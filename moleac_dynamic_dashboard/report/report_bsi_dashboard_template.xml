@@ -3,59 +3,111 @@
 <template id="report_bsi_dashboard">
     <t t-call="web.html_container">
         <t t-foreach="docs" t-as="doc">
-            <t t-call="web.external_layout">
+            <t t-call="web.internal_layout">
                 <div class="page bsi-dashboard-report">
 
-                    <!-- ── Report header ──────────────────────── -->
-                    <div class="bsi-report-header text-center mb-3">
-                        <h2><t t-esc="doc.name"/></h2>
-                        <p class="text-muted mb-0">
-                            <t t-esc="doc.company_id.name"/>
-                        </p>
-                        <t t-if="doc.is_divide and doc.value">
-                            <p class="text-muted small">
+                    <!-- ── Report title ─────────────────────────────────── -->
+                    <div style="text-align:center;margin-bottom:12px;
+                                border-bottom:2px solid #4A6FA5;padding-bottom:6px;">
+                        <div style="font-size:14px;font-weight:700;color:#1F2937;
+                                    letter-spacing:0.02em;">
+                            <t t-esc="doc.name"/>
+                        </div>
+                        <t t-if="doc.value and doc.value != 1">
+                            <div style="font-size:8px;color:#9CA3AF;margin-top:2px;">
                                 Amounts divided by <t t-esc="doc.value"/>
-                            </p>
+                            </div>
                         </t>
                     </div>
 
-                    <!-- ── One table per period section ──────── -->
+                    <!-- ── One table per section ──────────────────────── -->
                     <t t-foreach="sections" t-as="section">
                         <t t-if="section['rows']">
 
-                            <!-- Section title in red -->
-                            <h4 style="text-align:center;color:#c53030;
-                                       font-weight:700;margin:20px 0 8px;">
-                                <t t-esc="section['title']"/>
-                            </h4>
+                            <t t-set="columns" t-value="section['columns']"/>
+                            <t t-set="pgs"     t-value="section['period_groups']"/>
+                            <t t-set="hstyle"  t-value="section.get('header_style','actual_prev')"/>
+                            <t t-set="ncols"   t-value="len(columns) if columns else 0"/>
+                            <t t-set="span"    t-value="ncols + 1"/>
 
-                            <table class="table table-sm bsi-report-table"
-                                   style="font-size:11px;margin-bottom:24px;">
+                            <!-- Adaptive font / padding based on column count -->
+                            <t t-set="is_compact" t-value="ncols &gt; 4"/>
+                            <t t-set="is_micro"   t-value="ncols &gt; 10"/>
+
+                            <t t-set="f"      t-value="'7px'     if is_micro else ('8.5px'  if is_compact else '10px')"/>
+                            <t t-set="dw"     t-value="'14%'     if is_micro else ('20%'    if is_compact else '30%')"/>
+                            <t t-set="cp"     t-value="'2px 3px' if is_micro else ('3px 5px' if is_compact else '5px 8px')"/>
+                            <t t-set="hp"     t-value="'3px 3px' if is_micro else ('4px 5px' if is_compact else '6px 8px')"/>
+
+                            <table t-att-style="'width:100%;border-collapse:collapse;'
+                                                'font-size:' + f + ';'
+                                                'margin-bottom:12px;'
+                                                'border:1px solid #D6DFE9;'
+                                                'table-layout:fixed;'
+                                                'page-break-inside:auto;'">
                                 <thead>
-                                    <t t-set="columns"      t-value="section['columns']"/>
-                                    <t t-set="pgs"          t-value="section['period_groups']"/>
-                                    <t t-set="hdr_style"    t-value="section.get('header_style','actual_prev')"/>
+                                    <!-- Row 0: section title — repeats on every page -->
+                                    <tr>
+                                        <th t-att-colspan="span"
+                                            t-att-style="'padding:' + hp + ';'
+                                                         'text-align:left;'
+                                                         'background:#4A6FA5;'
+                                                         'color:#fff;'
+                                                         'font-size:' + f + ';'
+                                                         'font-weight:700;'
+                                                         'text-transform:uppercase;'
+                                                         'letter-spacing:0.07em;'
+                                                         'border-bottom:1px solid #3a5a8a;'">
+                                            <t t-esc="section['title']"/>
+                                        </th>
+                                    </tr>
 
                                     <t t-if="pgs and columns">
-                                        <!-- Row 1: group labels -->
-                                        <tr class="bsi-col-header">
+                                        <!-- Row 1: period group headers -->
+                                        <tr>
                                             <th rowspan="2"
-                                                style="width:35%;vertical-align:bottom;">
+                                                t-att-style="'width:' + dw + ';'
+                                                             'vertical-align:bottom;'
+                                                             'padding:' + hp + ';'
+                                                             'text-align:left;'
+                                                             'font-weight:700;'
+                                                             'color:#1F2937;'
+                                                             'background:#EEF2F7;'
+                                                             'border-right:1px solid #D6DFE9;'
+                                                             'border-bottom:1px solid #D6DFE9;'
+                                                             'word-wrap:break-word;'">
                                                 Department
                                             </th>
                                             <t t-foreach="pgs" t-as="pg">
+                                                <t t-set="g_bg" t-value="'#E8EDF5' if pg_first else '#EEF2F7'"/>
+                                                <t t-set="g_tx" t-value="'#1E3A5F' if pg_first else '#4A5E73'"/>
                                                 <th t-att-colspan="pg['span']"
-                                                    t-att-style="'text-align:center;border-left:2px solid #adb5bd;font-weight:700;background:' + ('#dbeafe' if hdr_style == \'actual_prev\' and (\'Actual\' in pg[\'label\'] or \'YTD\' in pg[\'label\']) else ('#d1fae5' if hdr_style == \'single\' else '#f8f9fa')) + ';'">
+                                                    t-att-style="'text-align:center;'
+                                                                 'padding:' + hp + ';'
+                                                                 'font-weight:700;'
+                                                                 'letter-spacing:0.04em;'
+                                                                 'border-left:1px solid #D6DFE9;'
+                                                                 'border-bottom:1px solid #D6DFE9;'
+                                                                 'background:' + g_bg + ';'
+                                                                 'color:' + g_tx + ';'
+                                                                 'white-space:nowrap;'">
                                                     <t t-esc="pg['label']"/>
                                                 </th>
                                             </t>
                                         </tr>
-                                        <!-- Row 2: period labels -->
+
+                                        <!-- Row 2: column labels -->
                                         <tr>
                                             <t t-foreach="columns" t-as="col">
-                                                <th style="text-align:right;font-size:10px;
-                                                           color:#6c757d;font-weight:600;
-                                                           border-left:1px solid #dee2e6;">
+                                                <th t-att-style="'text-align:right;'
+                                                                 'padding:' + cp + ';'
+                                                                 'color:#6B7280;'
+                                                                 'font-weight:600;'
+                                                                 'background:#F2F5FA;'
+                                                                 'border-left:1px solid #D6DFE9;'
+                                                                 'border-bottom:2px solid #D6DFE9;'
+                                                                 'white-space:nowrap;'
+                                                                 'overflow:hidden;'">
                                                     <t t-esc="col[0]"/>
                                                 </th>
                                             </t>
@@ -63,52 +115,130 @@
                                     </t>
 
                                     <t t-if="not (pgs and columns)">
-                                        <tr class="bsi-col-header">
-                                            <th style="width:50%">Department</th>
-                                            <th style="text-align:right;">Balance</th>
+                                        <tr>
+                                            <th t-att-style="'padding:' + hp + ';'
+                                                             'background:#EEF2F7;'
+                                                             'font-weight:700;color:#1F2937;'
+                                                             'width:50%;'
+                                                             'border-bottom:1px solid #D6DFE9;'">
+                                                Department
+                                            </th>
+                                            <th t-att-style="'text-align:right;'
+                                                             'padding:' + hp + ';'
+                                                             'background:#EEF2F7;'
+                                                             'font-weight:700;color:#1F2937;'
+                                                             'border-left:1px solid #D6DFE9;'
+                                                             'border-bottom:1px solid #D6DFE9;'">
+                                                Balance
+                                            </th>
                                         </tr>
                                     </t>
                                 </thead>
 
                                 <tbody>
                                     <t t-foreach="section['rows']" t-as="row">
+                                        <t t-set="lvl_pad" t-value="str(row['level'] * 10 + 4)"/>
 
+                                        <!-- Parent / section row -->
                                         <t t-if="row['row_type'] == 'section'">
-                                            <tr class="bsi-row-section">
-                                                <td t-att-colspan="1 + len(section['columns']) if section['columns'] else 2"
-                                                    t-att-style="'padding-left:' + str(row['level'] * 20 + 8) + 'px'">
-                                                    <strong><t t-esc="row['name']"/></strong>
-                                                </td>
-                                            </tr>
-                                        </t>
-
-                                        <t t-if="row['row_type'] == 'line'">
-                                            <tr class="bsi-row-line">
-                                                <td t-att-style="'padding-left:' + str(row['level'] * 20 + 16) + 'px'">
+                                            <t t-set="s_bg" t-value="'#EBF0F8' if row['level'] == 0 else '#F4F7FB'"/>
+                                            <tr t-att-style="'background:' + s_bg + ';'
+                                                             'page-break-inside:avoid;'">
+                                                <td t-att-style="'padding:' + cp + ';'
+                                                                 'padding-left:' + lvl_pad + 'px;'
+                                                                 'font-weight:700;'
+                                                                 'text-transform:uppercase;'
+                                                                 'letter-spacing:0.04em;'
+                                                                 'color:#1F2937;'
+                                                                 'border-right:1px solid #D6DFE9;'
+                                                                 'border-bottom:1px solid #D6DFE9;'
+                                                                 'background:' + s_bg + ';'
+                                                                 'word-wrap:break-word;'">
                                                     <t t-esc="row['name']"/>
                                                 </td>
                                                 <t t-if="not section['columns']">
-                                                    <td style="text-align:right;">—</td>
+                                                    <td style="border-bottom:1px solid #D6DFE9;"></td>
                                                 </t>
                                                 <t t-foreach="row.get('balances', [])" t-as="bal">
-                                                    <td t-att-class="'text-end bsi-negative' if bal &lt; 0 else 'text-end'">
-                                                        <t t-esc="'{:,.{}f}'.format(bal, decimal)"/>
+                                                    <t t-set="neg" t-value="bal is not None and bal &lt; 0"/>
+                                                    <td t-att-style="'text-align:right;'
+                                                                     'padding:' + cp + ';'
+                                                                     'font-weight:600;'
+                                                                     'border-left:1px solid #D6DFE9;'
+                                                                     'border-bottom:1px solid #D6DFE9;'
+                                                                     'background:' + s_bg + ';'
+                                                                     + (';color:#B91C1C;' if neg else ';color:#1F2937;')">
+                                                        <t t-if="bal is not None">
+                                                            <t t-esc="'{:,.{}f}'.format(bal, decimal)"/>
+                                                        </t>
+                                                        <t t-else="">—</t>
                                                     </td>
                                                 </t>
                                             </tr>
                                         </t>
 
-                                        <t t-if="row['row_type'] == 'total'">
-                                            <tr class="bsi-row-total">
-                                                <td t-att-style="'padding-left:' + str(row['level'] * 20 + 8) + 'px'">
-                                                    <strong><t t-esc="row['name']"/></strong>
+                                        <!-- Leaf / data row -->
+                                        <t t-if="row['row_type'] == 'line'">
+                                            <tr style="background:#FFFFFF;page-break-inside:avoid;">
+                                                <td t-att-style="'padding:' + cp + ';'
+                                                                 'padding-left:' + lvl_pad + 'px;'
+                                                                 'color:#4B5563;'
+                                                                 'border-right:1px solid #ECF0F5;'
+                                                                 'border-bottom:1px solid #ECF0F5;'
+                                                                 'word-wrap:break-word;'">
+                                                    <t t-esc="row['name']"/>
                                                 </td>
                                                 <t t-if="not section['columns']">
-                                                    <td style="text-align:right;"><strong>0.00</strong></td>
+                                                    <td style="text-align:right;
+                                                               border-bottom:1px solid #ECF0F5;">—</td>
                                                 </t>
                                                 <t t-foreach="row.get('balances', [])" t-as="bal">
-                                                    <td t-att-class="'text-end bsi-negative' if bal &lt; 0 else 'text-end'">
-                                                        <strong><t t-esc="'{:,.{}f}'.format(bal, decimal)"/></strong>
+                                                    <t t-set="neg" t-value="bal is not None and bal &lt; 0"/>
+                                                    <td t-att-style="'text-align:right;'
+                                                                     'padding:' + cp + ';'
+                                                                     'border-left:1px solid #ECF0F5;'
+                                                                     'border-bottom:1px solid #ECF0F5;'
+                                                                     + ('color:#B91C1C;' if neg else '')">
+                                                        <t t-if="bal is not None">
+                                                            <t t-esc="'{:,.{}f}'.format(bal, decimal)"/>
+                                                        </t>
+                                                        <t t-else="">—</t>
+                                                    </td>
+                                                </t>
+                                            </tr>
+                                        </t>
+
+                                        <!-- Total row -->
+                                        <t t-if="row['row_type'] == 'total'">
+                                            <tr style="background:#E2EAF4;page-break-inside:avoid;">
+                                                <td t-att-style="'padding:' + cp + ';'
+                                                                 'padding-left:' + lvl_pad + 'px;'
+                                                                 'font-weight:700;color:#1F2937;'
+                                                                 'border-right:1px solid #D6DFE9;'
+                                                                 'border-top:1px solid #D6DFE9;'
+                                                                 'border-bottom:1px solid #D6DFE9;'
+                                                                 'background:#E2EAF4;'">
+                                                    <t t-esc="row['name']"/>
+                                                </td>
+                                                <t t-if="not section['columns']">
+                                                    <td style="text-align:right;font-weight:700;
+                                                               border-top:1px solid #D6DFE9;
+                                                               border-bottom:1px solid #D6DFE9;">0.00</td>
+                                                </t>
+                                                <t t-foreach="row.get('balances', [])" t-as="bal">
+                                                    <t t-set="neg" t-value="bal is not None and bal &lt; 0"/>
+                                                    <td t-att-style="'text-align:right;'
+                                                                     'padding:' + cp + ';'
+                                                                     'font-weight:700;'
+                                                                     'border-left:1px solid #D6DFE9;'
+                                                                     'border-top:1px solid #D6DFE9;'
+                                                                     'border-bottom:1px solid #D6DFE9;'
+                                                                     'background:#E2EAF4;'
+                                                                     + ('color:#B91C1C;' if neg else 'color:#1F2937;')">
+                                                        <t t-if="bal is not None">
+                                                            <t t-esc="'{:,.{}f}'.format(bal, decimal)"/>
+                                                        </t>
+                                                        <t t-else="">—</t>
                                                     </td>
                                                 </t>
                                             </tr>

@@ -1,3 +1,7 @@
 id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
 access_bsi_dashboard_config_user,bsi.dashboard.config user,model_bsi_dashboard_config,account.group_account_user,1,1,1,0
 access_bsi_dashboard_config_manager,bsi.dashboard.config manager,model_bsi_dashboard_config,account.group_account_manager,1,1,1,1
+access_bsi_filter_template_user,bsi.dashboard.filter.template user,model_bsi_dashboard_filter_template,account.group_account_user,1,0,0,0
+access_bsi_filter_template_manager,bsi.dashboard.filter.template manager,model_bsi_dashboard_filter_template,account.group_account_manager,1,1,1,1
+access_bsi_export_wizard_user,bsi.dashboard.export.wizard user,model_bsi_dashboard_export_wizard,account.group_account_user,1,1,1,1
+access_bsi_export_wizard_manager,bsi.dashboard.export.wizard manager,model_bsi_dashboard_export_wizard,account.group_account_manager,1,1,1,1

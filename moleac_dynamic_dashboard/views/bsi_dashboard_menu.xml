@@ -7,4 +7,10 @@
               action="moleac_dynamic_dashboard.action_bsi_dashboard_config"
               sequence="10"/>
 
+    <!-- <menuitem id="menu_bsi_dashboard_filter_template"
+              name="Filter Templates"
+              parent="bsi_moleac_dashboard_mapping.data_mapping_config"
+              action="moleac_dynamic_dashboard.action_bsi_dashboard_filter_template"
+              sequence="11"/> -->
+
 </odoo>

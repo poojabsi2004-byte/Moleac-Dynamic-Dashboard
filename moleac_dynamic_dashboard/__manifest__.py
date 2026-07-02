@@ -7,6 +7,8 @@
     'depends': ['account', 'analytic','bsi_moleac_dashboard_mapping'],
     'data': [
         'security/ir.model.access.csv',
+        'views/bsi_dashboard_filter_template_views.xml',
+        'views/bsi_dashboard_export_wizard_views.xml',
         'views/bsi_dashboard_config_views.xml',
         'views/bsi_dashboard_menu.xml',
         'report/report_bsi_dashboard_action.xml',
@@ -21,4 +23,6 @@
     'installable': True,
     'application': False,
     'license': 'LGPL-3',
+    'pre_init_hook': 'pre_init_hook',
+    'post_init_hook': 'post_init_hook',
 }

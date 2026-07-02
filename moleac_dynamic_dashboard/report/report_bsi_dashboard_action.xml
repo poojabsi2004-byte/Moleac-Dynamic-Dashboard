@@ -1,6 +1,21 @@
 <?xml version="1.0" encoding="utf-8"?>
 <odoo>
 
+    <!-- A4 Landscape paper format for the dashboard (wide column tables) -->
+    <record id="paperformat_bsi_dashboard" model="report.paperformat">
+        <field name="name">BSI Dashboard (A4 Landscape)</field>
+        <field name="default" eval="False"/>
+        <field name="format">A4</field>
+        <field name="orientation">Landscape</field>
+        <field name="margin_top">8</field>
+        <field name="margin_bottom">8</field>
+        <field name="margin_left">8</field>
+        <field name="margin_right">8</field>
+        <field name="header_line" eval="False"/>
+        <field name="header_spacing">3</field>
+        <field name="dpi">96</field>
+    </record>
+
     <record id="action_report_bsi_dashboard" model="ir.actions.report">
         <field name="name">BSI Dynamic Dashboard</field>
         <field name="model">bsi.dashboard.config</field>
@@ -9,7 +24,7 @@
         <field name="report_file">moleac_dynamic_dashboard.report_bsi_dashboard</field>
         <field name="binding_model_id" ref="model_bsi_dashboard_config"/>
         <field name="binding_type">report</field>
-        <field name="paperformat_id" ref="base.paperformat_euro"/>
+        <field name="paperformat_id" ref="paperformat_bsi_dashboard"/>
     </record>
 
 </odoo>

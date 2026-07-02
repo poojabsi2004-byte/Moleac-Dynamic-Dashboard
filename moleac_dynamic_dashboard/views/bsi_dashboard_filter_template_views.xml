@@ -1,0 +1,110 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <!-- ── List ─────────────────────────────────────────────────── -->
+    <record id="bsi_dashboard_filter_template_list" model="ir.ui.view">
+        <field name="name">bsi.dashboard.filter.template.list</field>
+        <field name="model">bsi.dashboard.filter.template</field>
+        <field name="arch" type="xml">
+            <list string="Filter Templates">
+                <field name="name"/>
+                <field name="section"/>
+                <field name="year"/>
+                <field name="quarter"/>
+                <field name="quarter_year"/>
+                <field name="month"/>
+                <field name="month_year"/>
+            </list>
+        </field>
+    </record>
+
+    <!-- ── Form ─────────────────────────────────────────────────── -->
+    <record id="bsi_dashboard_filter_template_form" model="ir.ui.view">
+        <field name="name">bsi.dashboard.filter.template.form</field>
+        <field name="model">bsi.dashboard.filter.template</field>
+        <field name="arch" type="xml">
+            <form string="Filter Template">
+                <sheet>
+                    <div class="oe_title">
+                        <label for="name"/>
+                        <h1><field name="name" placeholder="Template name…"/></h1>
+                    </div>
+
+                    <group>
+                        <field name="section" widget="radio" class="o_field_radio_row"/>
+                    </group>
+
+                    <!-- ── Yearly ─────────────────────────────────── -->
+                    <group string="Yearly Settings"
+                           invisible="section != 'yearly'">
+                        <group>
+                            <field name="year"/>
+                            <field name="previous_year_number" string="Previous Years"/>
+                        </group>
+                    </group>
+
+                    <!-- ── Quarterly / Current Quarterly ──────────── -->
+                    <group string="Quarterly Settings"
+                           invisible="section not in ('quarterly', 'current_quarterly')">
+                        <group>
+                            <field name="quarter"
+                                   invisible="section == 'current_quarterly'"/>
+                            <field name="quarter_year" string="Year"/>
+                            <field name="previous_quarter_number"
+                                   string="Previous Quarters"/>
+                        </group>
+                    </group>
+
+                    <!-- ── Monthly / As of Month ──────────────────── -->
+                    <group string="Monthly Settings"
+                           invisible="section not in ('monthly', 'as_of_month')">
+                        <group>
+                            <field name="month"/>
+                            <field name="month_year" string="Year"/>
+                            <field name="previous_month_number"
+                                   string="Previous Months"/>
+                        </group>
+                    </group>
+
+                    <!-- ── Current Year's Months ──────────────────── -->
+                    <group string="Month Year"
+                           invisible="section != 'current_months'">
+                        <group>
+                            <field name="month_year" string="Year"/>
+                        </group>
+                    </group>
+
+                    <!-- ── Display options ────────────────────────── -->
+                    <group string="Display Options">
+                        <group>
+                            <field name="decimal"/>
+                        </group>
+                        <group>
+                            <field name="is_divide" string="Divide by Value"/>
+                            <field name="value" invisible="not is_divide"/>
+                        </group>
+                    </group>
+
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <!-- ── Window action ────────────────────────────────────────── -->
+    <record id="action_bsi_dashboard_filter_template" model="ir.actions.act_window">
+        <field name="name">Filter Templates</field>
+        <field name="res_model">bsi.dashboard.filter.template</field>
+        <field name="view_mode">list,form</field>
+        <field name="help" type="html">
+            <p class="o_view_nocontent_smiling_face">
+                Create your first Filter Template
+            </p>
+            <p>
+                A Filter Template stores a named set of report filters (section type,
+                year/quarter/month settings). Apply it in any Dashboard Config to
+                instantly switch the report view.
+            </p>
+        </field>
+    </record>
+
+</odoo>
